@@ -6,7 +6,7 @@
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
-project = 'Test'
+project = 'DDGWizard Tutorial'
 copyright = '2024, Mingkai'
 author = 'Mingkai'
 release = '1.0'
