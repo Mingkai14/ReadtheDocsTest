@@ -14,6 +14,7 @@ DDGWizard Tutorial
    Installation_Guide
    Usage
    NotFinishYet
+   Reference
 
 
 
