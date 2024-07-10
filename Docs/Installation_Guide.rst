@@ -1,147 +1,189 @@
 .. _installation_guide:
 
+.. raw:: html
+
+    <style>.highlight {
+            background-color: #E7FC9F;
+            color: #000000;
+            padding: 6px;
+            font-size: 12px;
+            font-weight: 100;
+        }
+            .keyword-highlight {
+            background-color: #FFFFF0;
+            color: #FF3366;
+            padding: 6px;
+            font-size: 12px;
+            font-weight: 100;
+        }
+    </style>
+
 Installation Guide
 ==================
 
-.. _`Only for Prediction`:
+.. raw:: html
 
-Only for Prediction
+    <div style="text-align: justify;">
+    DDGWizard mainly consists of two parts: the prediction part, used to predict ΔΔG, and the characterization part, which extracts features from the raw ΔΔG dataset to generate a feature set.
+    <p></p>
+    This section includes the installation guides for both parts.
+    <p></p>
+    <h4>Installation prerequisites:</h4>
+    CentOS 7 or Ubuntu system; GCC version higher than 4.8.5; Conda version higher than 23.0; Git.
+    <p></p>
+    </div>
+
+.. _`the Prediction Part`:
+
+the Prediction Part
 -------------------
 
-DDGWizard mainly consists of two parts: the prediction part, used to predict ΔΔG, and the characterization part, which extracts features from the raw ΔΔG dataset to generate a feature set. If you only need to predict ΔΔG, you just need to install the first part. The installation steps are as follows, which will take about 2 hours.
+.. raw:: html
 
-#. Git clone this repository (replace "Your_Path" with the folder on your local system where you want to install):
+    <div style="text-align: justify;">
+    This installation guide is intended for users who aim to predict ΔΔG.
+    <p></p>
+    The installation steps are as follows, which will take about 1 hour.
+    <p></p>
+    </div>
 
-    .. code-block:: shell
+.. raw:: html
 
-        cd Your_Path/
-        git clone https://github.com/Mingkai14/DDGWizard.git
+    <div style="text-align: justify;">
+    <h4>1. Git clone the DDGWizard repository</h4>
+    <p></p>
+    </div>
 
-#. Create conda virtual environment and install conda dependencies:
+.. code-block::
 
-    .. code-block:: shell
+    $ git clone https://github.com/Mingkai14/DDGWizard.git
 
-        cd Your_Path/DDGWizard/src/
-        vi environment.yml
+.. raw:: html
 
-    You must first modify change the prefix of the environmental.yml file to the path of your local conda envs folder. After modifying, the prefix should be "Your/Conda/Path/envs/DDGWizard".
+    <div style="text-align: justify;">
+    <h4>2. Config and install conda virtual environment</h4>
+    <p></p>
+    <p>There is a <span class="keyword-highlight">environment.yml</span> file at the path <span class="keyword-highlight">DDGWizard/src</span>, which is the Conda environment configuration file.</p>
+    <p></p>
+    <p>Open this file.</p>
+    <p></p>
+    </div>
 
-    .. code-block:: shell
+.. code-block::
 
-        conda env create -f environment.yml
-        conda activate DDGWizard
+    $ cd DDGWizard/src/
+    % vi environment.yml
 
-   Environment description: program was tested on Ubuntu v20.4, conda v23.0, and Python 3.10.2 and require the gcc version of Linux must be greater than 4.8.5.
+.. raw:: html
 
-#. Create your Blast database for sequence alignment:
+    <div style="text-align: justify;">
+    <p>Modify the prefix, which is on the last line. <b>Change the prefix to your local conda envs folder.</b></p>
+    <p></p>
+    <p>Then use Conda commands to create a Conda virtual environment and install dependencies. This may take some time.</p>
+    <p></p>
+    </div>
 
-   You need to download the fasta database file and transfer it to Blast database, allowing program to conduct sequence alignment.
+.. code-block::
 
-   We tested with uniref50 database and you can download it ("uniref50.fasta.gz") from https://ftp.uniprot.org/pub/databases/uniprot/uniref/uniref50/.
+     $ conda env create -f environment.yml
 
-   (The larger database allows more sufficient sequence alignment, but if you want to test the program first, you can download smaller fasta database files, like "uniref2010_01.tar.gz" from https://ftp.uniprot.org/pub/databases/uniprot/previous_releases/release-2010_01/uniref/).
+.. raw:: html
 
-   Once you finish downloading, you need to unzip it:
+   <div style="text-align: justify;">
+   <h4>3. Configure Modeller</h4>
+   <p></p>
+   The Modeller is software used to generate mutation structures of PDB files.
+   <p></p>
+   It was already installed when creating Conda environment. But to allow our program to use it, you need to have a license of the Modeller and configure it.
+   <p></p>
+   You need to enter <a href="https://salilab.org/modeller/registration.html">the official Modeller website</a>, register an account and obtain a license. You can simply follow their instructions to achieve this.
+   <p></p>
+   Once you obtain the license of the Modeller, you need to input the license into installed Modeller's configuration file. You can find it under the <span class="keyword-highlight">Conda envs folder</span>.
+   <p></p>
+   Enter your <span class="keyword-highlight">Conda envs folder</span>, and open the Modeller's configuration file:
+   <p></p>
+   </div>
 
-   .. code-block:: shell
+.. code-block::
 
-       gzip -d your_fasta_database.gz
+     $ vi DDGWizard/lib/modeller-10.4/modlib/modeller/config.py
 
-   If you are using previous uniref database file, it will be "tar.gz" format:
+.. raw:: html
 
-   .. code-block:: shell
+    <div style="text-align: justify;">
+    <p>Replace the XXXX to your license. Save and close it.</p>
+    <p></p>
+    </div>
 
-       tar -zxvf your_fasta_database.tar.gz
+.. raw:: html
 
-   You can obtain a fasta file as the raw sequence database file.
+    <div style="text-align: justify;">
+    <h4>4. Configure DSSP</h4>
+    The DSSP is software used to calculate the RSA (relative surface area) and secondary stuctures of PDB files.
+    <p></p>
+    Due to the version conflict issues, you must do operations below to make DSSP can be used of our program.
+    <p></p>
+    Enter your <span class="keyword-highlight">Conda envs folder</span>, then enter <span class="keyword-highlight">bin folder</span>, and copy <span class="keyword-highlight">mkdssp</span> (a modified version of dssp) as <span class="keyword-highlight">dssp</span>:
+    </div>
 
-   Then you need to use Blast suite to transfer the fasta file to the Blast database. There is an existing blast+ 2.13.0 program folder in our program. Please use the command as follows ("Your_DB_Name" is the name you have assigned to the generated Blast database, which will also be used as a parameter in the DDGWizard):
+.. code-block::
 
-   .. code-block:: shell
+    $ cd DDGWizard/bin/
+    $ cp mkdssp dssp
 
-       cd Your_Path/DDGWizard/bin/ncbi_blast_2_13_0+/bin/
-       chmod -R +x .
-       ./makeblastdb -in Your_Path/your_fasta_database.fasta -dbtype prot -out Your_Path/Your_DB_Name -parse_seqids
+.. raw:: html
 
-   This step will take some time as Blast is building the index to generate the sequence database. The duration depends on the size of the database file you have selected and the performance of your computer.
+    <div style="text-align: justify;">
+    <h4>5. Make sure the programs of the DDGWizard have the executable permission</h4>
+    The programs of DDGWizard need the executable permission to run.
+    <p></p>
+    Return to the top folder where you downloaded DDGWizard using <span class="keyword-highlight">git clone</span> (the DDGWizard program folder) and execute the command:
+    <p></p>
+    </div>
 
-#. Configure Modeller:
+.. code-block::
 
-   Modeller is used to generate mutation structures, it was already installed when creating conda environment. But it also need a license.
+    $ chmod -R +x .
 
-   You need to enter in Modeller official website to register an account and get the license, from https://salilab.org/modeller/registration.html. Then modify Modeller conda config file to add license:
+.. _`the Characterization part`:
 
-   Open your Modeller conda config file, which should be in "Your_Conda_Path/envs/DDGWizard/lib/modeller-10.4/modlib/modeller/config.py" and replace the XXXX in "config.py" file to your license. After modifying, save and close it.
-
-#. Configure DSSP:
-
-   DSSP is used to calculate the RSA (relative surface area) and secondary stuctures.
-   Due to version conflict issues, you must do operations below to make DSSP can be used:
-
-   .. code-block:: shell
-
-       conda activate DDGWizard
-       whereis mkdssp
-
-   You will obtain the location of mkdssp (a modified version of dssp), recording the directory path where mkdssp is located as "the_directory_of_mkdssp" (should be "Your/Conda/Path/envs/DDGWizard/bin/"):
-
-   .. code-block:: shell
-
-       cd the_directory_of_mkdssp
-       cp mkdssp dssp
-
-#. Last step: make sure the files of the DDGWizar have the executable permission:
-
-   You must perform this step, otherwise the program will not function properly:
-
-   .. code-block:: shell
-
-       cd Your_Path/DDGWizard
-       chmod -R +x .
-
-.. _`Both for Prediction and Characterization`:
-
-Both for Prediction and Characterization
+the Characterization Part
 ----------------------------------------
 
-If you need to characterize the raw ΔΔG data, extracting features from its PDB files or sequences for analysis or machine learning purposes, you can use DDGWizard's characterization part. The characterization part requires additional installations to calculate the complete feature set, and for cross-platform calling certain software to calculate, DDGWizard uses Singularity to automatically call corresponding software within the container.
+.. raw:: html
 
-#. Complete steps 1-6 identical to the prediction part:
+    <div style="text-align: justify;">
+    This installation guide is intended for users who aim to characterize raw ΔΔG data. It will output complete ΔΔG feature set for analysis or machine learning purposes.
+    <p></p>
+    The characterization part requires additional prerequisites to meet the needs of calculation for complete feature set. The characterization part uses certain R-based packages and certain cross-platform software, thus requiring dependencies on the R language and the container system.
+    <p></p>
+    <h4>Additional prerequisites:</h4>
+    R; Docker or Singularity (Only one is needed).
+    <p></p>
+    </div>
 
-   Perform the same operations as steps 1-6 in the prediction part.
+.. raw:: html
 
-#. Configure R:
+    <div style="text-align: justify;">
+    <h4>1. Complete the 1-5 steps of the prediction part</h4>
+    <p></p>
+    Perform the same operations as steps 1-5 in the prediction part.
+    <p></p>
+    </div>
 
-   You need to install R and R package "Bio3D"::
+.. raw:: html
 
-    (How to install R?)
-    R
+    <div style="text-align: justify;">
+    <h4>2. Install Bio3D</h4>
+    The package Bio3D used to calculate the NMA (normal mode analysis) features.
+    <p></p>
+    Once your R and use following commands to install package "Bio3D":
+    <p></p>
+    </div>
+
+.. code-block::
+
     install.packages("bio3d")
-
-#. Configure container evironment:
-
-   Characterization part also runs some software in specific linux system. To solve platform compatibility, we use container to run these software. Our script will automatically call commands to run container. Docker and Singularity are supported. You only need to configure one of both.
-
-   There are two were supported? If you want to use Docker:
-   You need to follow docker official instructions to install docker (?).
-   You must add your user to docker super privilege user group, which should have set when docker was installed::
-
-    sudo usermod -aG docker Your_User_Name
-    (Then restart your linux system)
-
-   You need to load docker image from software folder::
-
-    docker load -i Your_Path/DDGWizard/src/Prof_Source/myprof.tar
-
-   If you want to use Singularity:
-   (only install singularity, how? download big file)
-   You need to follow singularity official instructions to install singularity. You don't need to additionally configure using singularity.
-
-#. Make sure all files have run permission::
-
-    cd Your_Path/DDGWizard
-    chmod -R +x .
-
 
 
 
