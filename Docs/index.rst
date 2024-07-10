@@ -13,7 +13,6 @@ DDGWizard Tutorial
    Introduction
    Installation_Guide
    Usage
-   NotFinishYet
    Reference
 
 
