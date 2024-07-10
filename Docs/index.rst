@@ -12,7 +12,9 @@ DDGWizard Tutorial
 
    Introduction
    Installation_Guide
-   Usage
+   Predict_ddg
+   Predict_ddg_of_sm
+   Generate_features
    Reference
 
 
