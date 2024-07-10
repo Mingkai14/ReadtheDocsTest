@@ -1,23 +1,42 @@
 .. _usage:
 
+.. raw:: html
+
+    <style>.highlight {
+            background-color: #E7FC9F;
+            color: #000000;
+            padding: 6px;
+            font-size: 12px;
+            font-weight: 100;
+        }
+            .keyword-highlight {
+            background-color: #FFFFF0;
+            color: #FF3366;
+            padding: 6px;
+            font-size: 12px;
+            font-weight: 100;
+        }
+    </style>
+
 Usage
-============
+========
 
-.. _`Tips`:
+.. _`Predict ΔΔG`:
 
-Tips
--------------------
-
-   (1). You must cd to the top folder of DDGWizard to run and make sure you are in DDGWizard virtual environment and finish environment preparation.
-
-   (2). DDGWizard itself supports multiprocessing. We recommend utilizing our built-in multiprocessing fuction. Avoid running multiple DDGWizard in the same time and in the same folder, as conflicts may arise when the program matches files. If you genuinely need to implement multiprocessing or multithreading for running DDGWizard by yourself, please make copies of the DDGWizard folder. Ensure that each instance of the DDGWizard program running in different processes/threads resides in a separate folder.
-
-   (3). Avoid to place your files, such as data files, in the top folder of DDGWizard. The program will automatically clean up files in the top folder that are unrelated to the program. It is recommended to place them in ./src/
-
-.. _`Predict_ddG_Executable.py`:
-
-Predict_ddG_Executable.py
+Predict ΔΔG
 -------------------------
+
+.. raw:: html
+
+    <div style="text-align: justify;">
+    This guide is intended to show users who aim to characterize raw ΔΔG data. It will output complete ΔΔG feature set for analysis or machine learning purposes.
+    <p></p>
+    The characterization part requires additional prerequisites to meet the needs of calculation for complete feature set. The characterization part uses certain R-based packages and certain cross-platform software, thus requiring dependencies on the R language and the container system.
+    <p></p>
+    <h4>Additional prerequisites:</h4>
+    R; Docker or Singularity (Only one is needed).
+    <p></p>
+    </div>
 
    This python program aims to predict ddG.
 
@@ -193,3 +212,54 @@ utility_tool.py
        python Predict_ddG_Executable.py
        --pred_dataset_path ./src/pred.xls
        --db_folder_path Your_Path/blast_db_folder/ --db_name your_db_name --if_reversed_data 0 --blast_process_num 4 --mode whole --process_num 4' to perform the prediction.
+
+
+
+
+
+
+
+
+
+#. Create your Blast database for sequence alignment:
+
+   You need to download the fasta database file and transfer it to Blast database, allowing program to conduct sequence alignment.
+
+   We tested with uniref50 database and you can download it ("uniref50.fasta.gz") from https://ftp.uniprot.org/pub/databases/uniprot/uniref/uniref50/.
+
+   (The larger database allows more sufficient sequence alignment, but if you want to test the program first, you can download smaller fasta database files, like "uniref2010_01.tar.gz" from https://ftp.uniprot.org/pub/databases/uniprot/previous_releases/release-2010_01/uniref/).
+
+   Once you finish downloading, you need to unzip it:
+
+   .. code-block:: shell
+
+       gzip -d your_fasta_database.gz
+
+   If you are using previous uniref database file, it will be "tar.gz" format:
+
+   .. code-block:: shell
+
+       tar -zxvf your_fasta_database.tar.gz
+
+   You can obtain a fasta file as the raw sequence database file.
+
+   Then you need to use Blast suite to transfer the fasta file to the Blast database. There is an existing blast+ 2.13.0 program folder in our program. Please use the command as follows ("Your_DB_Name" is the name you have assigned to the generated Blast database, which will also be used as a parameter in the DDGWizard):
+
+   .. code-block:: shell
+
+       cd Your_Path/DDGWizard/bin/ncbi_blast_2_13_0+/bin/
+       chmod -R +x .
+       ./makeblastdb -in Your_Path/your_fasta_database.fasta -dbtype prot -out Your_Path/Your_DB_Name -parse_seqids
+
+   This step will take some time as Blast is building the index to generate the sequence database. The duration depends on the size of the database file you have selected and the performance of your computer.
+
+.. _`Tips`:
+
+Tips
+-------------------
+
+   (1). You must cd to the top folder of DDGWizard to run and make sure you are in DDGWizard virtual environment and finish environment preparation.
+
+   (2). DDGWizard itself supports multiprocessing. We recommend utilizing our built-in multiprocessing fuction. Avoid running multiple DDGWizard in the same time and in the same folder, as conflicts may arise when the program matches files. If you genuinely need to implement multiprocessing or multithreading for running DDGWizard by yourself, please make copies of the DDGWizard folder. Ensure that each instance of the DDGWizard program running in different processes/threads resides in a separate folder.
+
+   (3). Avoid to place your files, such as data files, in the top folder of DDGWizard. The program will automatically clean up files in the top folder that are unrelated to the program. It is recommended to place them in ./src/
