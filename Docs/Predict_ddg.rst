@@ -77,8 +77,8 @@ Predict ΔΔG
 .. raw:: html
 
     <div style="text-align: justify;">
-    <h4>2. Example of running</h4>
-    <p>We first provide you with an example of running DDGWizard to predict ΔΔG, and then explain the specifics of each parameter in detail.</p>
+    <h4>2. Example template</h4>
+    <p>We first provide you with an example template of running DDGWizard to predict ΔΔG, and then explain the specifics of each parameter in detail.</p>
     <p></p>
     You can run the program with:
     <p></p>
@@ -92,7 +92,7 @@ Predict ΔΔG
     $ conda activate DDGWizard
     $ cd DDGWizard/
     $ python Predict_ddG_Executable.py \
-        --pred_dataset_path your_dataset.xls \
+        --pred_dataset_path <b>&lt;the path to xls file of raw data&gt;</b> \
         --db_folder_path <b>&lt;the path to save Blast database&gt;</b> \
         --db_name <b>&lt;the name to assign for Blast database&gt;</b> \
         --if_reversed_data 0 \
@@ -128,6 +128,8 @@ Predict ΔΔG
 +-------------+---------------------+------------------+----------------+----------+------------------+
 | 2LZM        | ./src/pdbs/2lzm.pdb | M102L            |   A            |   7      |  25              |
 +-------------+---------------------+------------------+----------------+----------+------------------+
+| ...         | ...                 | ...              |   ...          |  ...     |  ...             |
++-------------+---------------------+------------------+----------------+----------+------------------+
 
 .. raw:: html
 
@@ -135,9 +137,9 @@ Predict ΔΔG
     Description of attributes for each column in the table file:
     <div style="margin-left: 40px;">
     <p></p>
-    a. <span class="keyword-highlight">Name</span>: Use a single name to label a predicted protein; the name should consist of fewer than 8 alphanumeric characters, with both uppercase and lowercase letters allowed; different rows of data can use the same protein name, but each protein name can only correspond to one <span class="keyword-highlight">PDB_File_Path  </span>.
+    a. <span class="keyword-highlight">Name</span>: Use a single name to label a predicted protein; the name should consist of fewer than 8 alphanumeric characters, with both uppercase and lowercase letters allowed; different rows of data can use the same protein name, but each protein name can only correspond to one <span class="keyword-highlight">PDB_File_Path</span>.
     <p></p>
-    b. <span class="keyword-highlight">PDB_File_Path</span>: For the predicted protein, the corresponding PDB file path. PDB files are protein structure files. There are currently various ways to access PDB files, such as through <a href="https://www.rcsb.org/">the RCSB database</a>. In path <span class="keyword-highlight">DDGWizard/src/pdbs</span>, we have also prepared PDB files for testing, corresponding to <span class="keyword-highlight">sample_pred.xls</span>.
+    b. <span class="keyword-highlight">PDB_File_Path</span>: For the predicted protein, the corresponding <span class="keyword-highlight">PDB</span> file path. <span class="keyword-highlight">PDB</span> files are protein structure files. There are currently various ways to access <span class="keyword-highlight">PDB</span> files, such as through <a href="https://www.rcsb.org/">the RCSB database</a>. In path <span class="keyword-highlight">DDGWizard/src/pdbs</span>, we have also prepared <span class="keyword-highlight">PDB</span> files for testing, corresponding to <span class="keyword-highlight">sample_pred.xls</span>.
     <p></p>
     c. <span class="keyword-highlight">Variation</span>: Specify the specific mutation for which you want to predict ΔΔG, including the mutation site information and amino acid substitution details.
     <p></p>
@@ -186,7 +188,7 @@ Predict ΔΔG
 
     <div style="text-align: justify;">
     (6). <span class="keyword-highlight">--mode</span>
-    Please provide the default value "whole".
+    Please provide the default value <span class="keyword-highlight">whole</span>.
     <p></p>
     </div>
 
@@ -202,6 +204,28 @@ Predict ΔΔG
 
     <div style="text-align: justify;">
     <h4>4. Output</h4>
-    There will be an output XLS file located in <span class="keyword-highlight">DDGWizard/Pred_Res/</span>, which will record all prediction results.
+    There will be an output xls file <span class="keyword-highlight">Pred_ddG.xls</span> located in <span class="keyword-highlight">DDGWizard/src/Pred_Res/</span>, which will record all prediction results.
+    <p></p>
+    </div>
+
+.. raw:: html
+
+    <div style="text-align: justify;">
+    <h4>5. Notes</h4>
+    <p></p>
+    </div>
+
+.. raw:: html
+
+    <div style="text-align: justify;">
+    (1). When running DDGWizard, you need to <span class="keyword-highlight">cd</span> to the top-level directory of the program to execute the program.
+    <p></p>
+    (2). DDGWizard supports multi-process handling. If you wish to run multiple instances of DDGWizard to fully utilize your computer's resources, we recommend using the multi-process parameters provided by DDGWizard.
+    <p></p>
+    <b>Avoid running multiple instances of DDGWizard from the same folder,</b> as the program synchronizes files within the folder, which can cause synchronization errors.
+    <p></p>
+    If you need to run multiple instances at the same time by yourself, <b>please make multiple copies of the DDGWizard folder and run each instance separately in its own folder.</b>
+    <p></p>
+    (3). <b>Do not place your files in the top-level folder of DDGWizard.</b> DDGWizard will automatically clean files in the top-level folder to maintain multi-process synchronization.
     <p></p>
     </div>
