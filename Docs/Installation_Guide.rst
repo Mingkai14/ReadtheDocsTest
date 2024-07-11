@@ -175,9 +175,9 @@ the Characterization Part
 
     <div style="text-align: justify;">
     <h4>2. Install Bio3D</h4>
-    The package Bio3D used to calculate the NMA (normal mode analysis) features.
+    The package <span class="keyword-highlight">Bio3D</span> used to calculate the NMA (normal mode analysis) features.
     <p></p>
-    Once your R and use following commands to install package "Bio3D":
+    Open your <span class="keyword-highlight">R</span> and use following commands to install package <span class="keyword-highlight">Bio3D</span>:
     <p></p>
     </div>
 
@@ -185,5 +185,20 @@ the Characterization Part
 
     install.packages("bio3d")
 
+.. raw:: html
+
+    <div style="text-align: justify;">
+    <h4>3. For container</h4>
+    As long as your system has installed and configured the one of <span class="keyword-highlight">Docker</span> or <span class="keyword-highlight">Singularity</span>, the characterization program can run normally.
+    <p></p>
+    The program will automatically call the container images in the path <span class="keyword-highlight">DDGWizard/src/Prof_Source/</span> and use the software within.
+    <p></p>
+    <b>One thing to note is that:</b>
+    <p></p>
+    Please check if the container image files <span class="keyword-highlight">myprof.tar</span> and <span class="keyword-highlight">myprof.sif</span> in the path <span class="keyword-highlight">DDGWizard/src/Prof_Source/</span> are complete. Since they are large files, managed by <a href="https://git-lfs.com/">the Git LFS</a>, sometimes they can not be downloaded completely.
+    <p></p>
+    If they are not complete, please visit <a href="https://github.com/Mingkai14/DDGWizard/tree/latest6/src/Prof_Source">the DDGWizard GitHub website</a> to manually download them and replace them in the folder <span class="keyword-highlight">DDGWizard/src/Prof_Source/</span>.
+    <p></p>
+    </div>
 
 
